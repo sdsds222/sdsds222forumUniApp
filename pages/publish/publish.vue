@@ -10,11 +10,13 @@
 			</view>
 			<p>要发布到的分区板块：</p>
 			<!-- 板块选择框 -->
-			<picker @change="handlePickerChange" mode="selector" :range="classOptions">
-				<view class="picker">
-					{{ classOptions[classId] }}
-				</view>
-			</picker>
+			<view class="picker-view">
+				<picker @change="handlePickerChange" mode="selector" :range="classOptions">
+					<view class="picker">
+						{{ classOptions[classId] }}
+					</view>
+				</picker>
+			</view>
 			<p>富文本内容：</p>
 			<view class="editor">
 				<!-- 富文本编辑器 -->
@@ -32,7 +34,9 @@
 	import {
 		parseJwt
 	} from '../../utils/jwt.js'
-	import {host} from '../../utils/host.js'
+	import {
+		host
+	} from '../../utils/host.js'
 	export default {
 		data() {
 			return {
@@ -51,23 +55,6 @@
 
 			this.navArr = [];
 			this.classOptions = [];
-			
-			
-
-			this.jwtToken = uni.getStorageSync("jwt-token");
-			if (this.jwtToken != '') {
-				this.author = parseJwt(this.jwtToken).username;
-				
-			} else {
-				uni.showToast({
-					title: '用户未登录',
-					icon: 'loading', // 图标类型，可以是'success'、'loading'等
-					duration: 1000, // 持续时间（以毫秒为单位）
-				});
-				uni.switchTab({
-					url: '/pages/login/login'
-				})
-			}
 
 			uni.request({
 				url: host + "/uniapp/navlist",
@@ -75,6 +62,34 @@
 					this.navArr = res.data.data;
 					for (let i = 0; i < this.navArr.length; i++) {
 						this.classOptions.push(this.navArr[i].classname);
+					}
+				}
+			})
+
+
+
+
+			uni.request({
+				url: host + '/uniapp/test', // 请求的URL
+				method: 'POST', // 请求方法
+				header: {
+					token: uni.getStorageSync("jwt-token")
+				},
+				success: res => {
+					if (res.data.data == 'LOGIN') {
+						console.log("登录成功");
+						this.jwtToken = uni.getStorageSync("jwt-token");
+						this.author = parseJwt(this.jwtToken).username;
+					} else {
+						console.log("登录失败");
+						uni.showToast({
+							title: '用户未登录',
+							icon: 'loading', // 图标类型，可以是'success'、'loading'等
+							duration: 1000, // 持续时间（以毫秒为单位）
+						});
+						uni.switchTab({
+							url: '/pages/login/login'
+						})
 					}
 				}
 			})
@@ -184,13 +199,24 @@
 	}
 
 	picker {
-		margin-bottom: 20px;
 		height: 50rpx;
-		border: 1px solid gray;
+		padding: 10rpx;
 	}
 
 	.picker {
 		text-align: center;
+	}
+
+	.picker-view {
+
+		border: 1px solid gray;
+
+		margin-bottom: 30rpx;
+
+	}
+
+	.url-editor-view {
+		margin-bottom: 30rpx;
 	}
 
 	.url-editor {
