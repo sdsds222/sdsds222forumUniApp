@@ -1,0 +1,1 @@
+<view class="newsbox"><view class="pic"><image src="{{a}}" binderror="{{b}}"></image></view><view class="text"><view class="title">{{c}}</view><view wx:if="{{d}}" class="info"><text>{{e}}</text><text>{{f}}浏览量</text></view><view wx:else class="info"><text>{{g}}</text></view></view></view>

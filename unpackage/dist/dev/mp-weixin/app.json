@@ -1,0 +1,46 @@
+{
+  "pages": [
+    "pages/index/index",
+    "pages/user/user",
+    "pages/detail/detail",
+    "pages/publish/publish",
+    "pages/login/login"
+  ],
+  "window": {
+    "navigationBarTextStyle": "white",
+    "navigationBarTitleText": "测试UniApp应用程序",
+    "navigationBarBackgroundColor": "#31C27C",
+    "backgroundColor": "#F8F8F8"
+  },
+  "tabBar": {
+    "color": "#666",
+    "selectedColor": "#31C27C",
+    "list": [
+      {
+        "text": "首页",
+        "pagePath": "pages/index/index",
+        "iconPath": "static/images/home.png",
+        "selectedIconPath": "static/images/home-h.png"
+      },
+      {
+        "text": "发帖",
+        "pagePath": "pages/publish/publish",
+        "iconPath": "static/images/logo.png",
+        "selectedIconPath": "static/images/logo.png"
+      },
+      {
+        "text": "历史",
+        "pagePath": "pages/user/user",
+        "iconPath": "static/images/history.png",
+        "selectedIconPath": "static/images/history.png"
+      },
+      {
+        "text": "个人",
+        "pagePath": "pages/login/login",
+        "iconPath": "static/images/user.png",
+        "selectedIconPath": "static/images/user-h.png"
+      }
+    ]
+  },
+  "usingComponents": {}
+}

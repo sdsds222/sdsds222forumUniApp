@@ -1,0 +1,48 @@
+
+.publish-content {
+		display: flex;
+		/* 使用 Flex 布局 */
+		flex-direction: column;
+}
+.container {
+		padding: 20px;
+		flex: 1;
+}
+input {
+		margin-bottom: 20px;
+		height: 100rpx;
+		border: 1px solid gray;
+}
+picker {
+		margin-bottom: 20px;
+		height: 50rpx;
+		border: 1px solid gray;
+}
+.picker {
+		text-align: center;
+}
+.url-editor {
+		border: 1px solid gray;
+}
+.content-editor {
+		min-height: 200rpx;
+}
+.editor {
+		border: 1px solid gray;
+}
+
+
+	/* 添加按钮的样式 */
+.publish-button {
+		width: 80%;
+		margin-bottom: 30rpx;
+		background-color: #007bff;
+		/* 背景颜色 */
+		color: #fff;
+		/* 文字颜色 */
+		padding: 10rpx 20rpx;
+		/* 按钮内边距 */
+		border: none;
+		border-radius: 5rpx;
+		cursor: pointer;
+}
