@@ -51,10 +51,13 @@
 
 			this.navArr = [];
 			this.classOptions = [];
+			
+			
 
 			this.jwtToken = uni.getStorageSync("jwt-token");
 			if (this.jwtToken != '') {
 				this.author = parseJwt(this.jwtToken).username;
+				
 			} else {
 				uni.showToast({
 					title: '用户未登录',
