@@ -39,8 +39,10 @@
 		},
 		methods: {
 			goDetail(item) {
+				console.log(item);
 				uni.navigateTo({
-					url: `/pages/detail/detail?cid=${item.classid}&id=${item.id}`
+					url: `/pages/detail/detail?cid=${item.classid}&id=${item.id}`,
+					animationType: 'pop-in'
 				})
 			},
 

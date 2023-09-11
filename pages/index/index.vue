@@ -24,7 +24,9 @@
 </template>
 
 <script>
-	import {host} from '../../utils/host.js'
+	import {
+		host
+	} from '../../utils/host.js'
 	export default {
 		data() {
 			return {
@@ -32,14 +34,17 @@
 				navIndex: 0,
 				navArr: [],
 				newsArr: [],
-				currentPage: 1,
+				currentPage: 0,
 				nowId: 1,
 				loading: 0 //0默认 1加载中 2没有更多了
 			}
 		},
 		onLoad() {
 			this.getNavData();
-			this.getNewsData();
+
+			this.getNewsLast();
+
+
 		},
 		onShow() {
 			if (uni.getStorageSync("jwt-token") == '') {
@@ -55,9 +60,13 @@
 		},
 		onReachBottom() {
 			console.log("到底部了");
-			this.loading = 1;
-			this.currentPage++;
-			this.getNewsData();
+
+			if (this.currentPage > 1 && this.loading == 0) {
+				this.currentPage--;
+				this.loading = 1;
+				this.getNewsData();
+			}
+
 
 		},
 		onPullDownRefresh() {
@@ -66,26 +75,47 @@
 				success() {
 					//成功回调
 					setTimeout(function() {
+						that.getNewsLast();
 						uni.stopPullDownRefresh(); //停止下拉刷新
-						that.currentPage = 1;
-						that.newsArr = [];
-						that.getNavData();
-						that.getNewsData();
 					}, 500);
 				},
 			});
 		},
 		methods: {
+			getNewsLast() {
+				this.newsArr = [];
+
+				this.currentPage = 0;
+				this.loading = 0;
+				uni.request({
+
+					url: host + "/uniapp/newslistlast",
+					data: {
+						num: 8,
+						cid: this.nowId,
+					},
+					success: res => {
+						if (res.data.code != 0) {
+							this.newsArr = res.data.data.newsList.reverse();
+							this.currentPage = res.data.data.page;
+							if (this.currentPage == 1) {
+								this.loading = 2;
+							}
+						}
+					}
+
+				})
+			},
 			//点击导航切换
 			clickNav(index, id) {
-				this.newsArr = [];
 				let that = this;
 				setTimeout(function() {
 					that.navIndex = index;
-					that.currentPage = 1;
+
+					this.loading = 0;
+
 					that.nowId = id;
-					that.loading = 0;
-					that.getNewsData();
+					that.getNewsLast();
 				}, 50);
 
 			},
@@ -104,7 +134,9 @@
 				uni.request({
 					url: host + "/uniapp/navlist",
 					success: res => {
-						this.navArr = res.data.data;
+						if (res.data.code != 0) {
+							this.navArr = res.data.data;
+						}
 					}
 				})
 			},
@@ -114,7 +146,7 @@
 
 			getNewsData() {
 				uni.request({
-					
+
 					url: host + "/uniapp/newslist",
 					data: {
 						num: 8,
@@ -122,10 +154,16 @@
 						page: this.currentPage
 					},
 					success: res => {
-						if (res.data.data.length == 0 || this.currentPage == 1) {
-							this.loading = 2;
+						if (res.data.code != 0) {
+							if (this.currentPage == 1) {
+								this.loading = 2;
+							} else {
+								this.loading = 0;
+							}
+							res.data.data.reverse();
+							this.newsArr = [...this.newsArr, ...res.data.data];
+
 						}
-						this.newsArr = [...this.newsArr, ...res.data.data];
 					}
 
 
